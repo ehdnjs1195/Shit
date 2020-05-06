@@ -1,0 +1,5 @@
+#Properties Example
+#Thu Apr 23 01:30:00 KST 2020
+autosave=5
+timeout=10
+language=\uD55C\uAE00

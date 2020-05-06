@@ -1,0 +1,5 @@
+# sample properties
+port=5000
+ip=14.47.114.190
+client_path=c:/myFolder/
+server_path=c:/yourFolder/
