@@ -1,7 +1,8 @@
-package example3;
+package test2;
 
 import java.io.BufferedOutputStream;
 import java.io.BufferedWriter;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -77,6 +78,7 @@ public class Monitor extends Thread{
 		//필요한 객체를 담을 변수 만들기
 		Socket socket=null;
 		OutputStream os=null;
+		DataOutputStream dos = null;
 		FileInputStream fis=null;
 		OutputStreamWriter osw=null;
 		BufferedWriter bw=null;
@@ -85,26 +87,34 @@ public class Monitor extends Thread{
 			socket=new Socket(ip, port);
 			System.out.println("Socket 연결 성공!");
 			fis=new FileInputStream(directory+context);
-			os=socket.getOutputStream();
-			bo = new BufferedOutputStream(os);
+//			os=socket.getOutputStream();
+			dos = new DataOutputStream(socket.getOutputStream());
+//			bo = new BufferedOutputStream(os);
 			//파일명 보내기.
-			osw=new OutputStreamWriter(os);
-			bw=new BufferedWriter(osw);
-			String name = context.toString();
-			bw.write(name);	
-			bw.newLine(); 	
-			bw.flush(); 	
-			
+//			osw=new OutputStreamWriter(os);
+//			bw=new BufferedWriter(osw);
+//			String name = context.toString();
+//			bw.write(name);	
+//			bw.newLine(); 	
+//			bw.flush(); 	
+			dos.writeUTF(context.toString());
+			File f = new File(directory + context);
+			dos.writeLong(f.length());
+			int length = 0;
+			byte[] buffer=new byte[1024];
+			while((length = fis.read(buffer)) != -1) {
+				dos.write(buffer, 0 , length);
+				dos.flush();
+			}
 			
 			//byte 데이터를 읽어들일 배열
-			byte[] buffer=new byte[1024];
-			
-			while(true){
-				int readedByte=fis.read(buffer);
-				if(readedByte==-1)break;
-				bo.write(buffer, 0, readedByte);
-				bo.flush();//방출
-			}
+//			
+//			while(true){
+//				int readedByte=fis.read(buffer);
+//				if(readedByte==-1)break;
+//				bo.write(buffer, 0, readedByte);
+//				bo.flush();//방출
+//			}
 			System.out.println("파일 전송 성공!");
 		}catch(Exception e){
 			e.printStackTrace();

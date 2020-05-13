@@ -30,9 +30,10 @@ public class PropertiesTest {
 			p.load(new FileInputStream("output.txt"));	//properties 파일로 부터 읽어오기
 			System.out.println(p);
 			//store()는 일반 txt 파일로 저장.
-			p.store(new FileOutputStream("output.txt")	//저장할 파일의 경로(이름)
+			p.store(new FileOutputStream("output.properties")	//저장할 파일의 경로(이름)
 					, "Properties Example");	//파일에대한 설명. 파일의 주석으로 저장된다.
 			//storeToXML()은 XML형식으로 저장한다.
+			
 			p.storeToXML(new FileOutputStream("output.xml"), "Properties Example");
 		} catch(IOException ex) {
 			ex.printStackTrace();
