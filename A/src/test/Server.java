@@ -1,5 +1,6 @@
 package test;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -35,7 +36,8 @@ public class Server {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+		executorService.shutdown();
+		System.out.println("[서버 종료]");
 	}
 	
 	public static void initProperties() {
@@ -44,6 +46,8 @@ public class Server {
 			p.load(new FileInputStream("properties.txt"));
 			path = p.getProperty("server_path");
 			port = Integer.parseInt(p.getProperty("port"));
+			File f = new File(path);
+			if(!f.exists()) f.mkdir();	//경로 dir가 없으면 생성.
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {

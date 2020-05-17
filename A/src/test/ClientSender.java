@@ -11,66 +11,59 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 
 public class ClientSender extends Thread{
-	private File[] fileList;
+//	private File[] fileList;
 	private String path;
 	private int port;
 	private String ip;
+	private String fileName;
+	private long fileSize;
 	
 	public ClientSender() {}
-	public ClientSender(int port, String ip, String path) {
+	public ClientSender(int port, String ip, String path, String fileName, long fileSize) {
 		this.path = path;
 		this.port = port;
 		this.ip = ip;
+		this.fileName = fileName;
+		this.fileSize = fileSize;
+		setDaemon(true);
 	}
 	
 	@Override
 	public void run() {
-		pollingDir();
+		sendFile(fileName, fileSize);
 		
-	}
-	
-	//지정 디렉토리 감시 아직 미완성.
-	public void pollingDir() {
-		createFileInfo();
-		for(File file:fileList) {
-			if(file.isFile()) {
-				String fileName = file.getName();
-				long fileSize = file.length();
-				sendFile(fileName ,fileSize);
-			}
-		}
-	}
-	
-	//파일 정보 정보 생성
-	public void createFileInfo() {
-		File f = new File(path);
-		if(fileList.length != 0) {	//디렉토리에 파일이 있다면
-			fileList = f.listFiles();			
-		}
 	}
 	
 	//파일 전송
 	public void sendFile(String fileName, long fileSize) {
 		Socket socket = null;
 		DataOutputStream dos = null;
-		try(FileInputStream fi = new FileInputStream(path+fileName);
-				FileOutputStream fo = new FileOutputStream(path+fileName);
-				BufferedInputStream bis = new BufferedInputStream(fi);
-				BufferedOutputStream bos = new BufferedOutputStream(dos);	//dos를 여기서 넣어도 되나?
-				) {
+		FileInputStream fi = null;
+		BufferedInputStream bis = null;
+		BufferedOutputStream bos = null;
+		
+		try {
 			socket = new Socket(ip, port);
 
+			//파일 정보 전송
 			dos = new DataOutputStream(socket.getOutputStream());	//try ~ with resource 구문으로 쓸 수 있나? 순서가 어떻게 되지?
 			dos.writeUTF(fileName);
 			dos.writeLong(fileSize);
 			
+			fi = new FileInputStream(path+fileName);
+			bis = new BufferedInputStream(fi);
+			bos = new BufferedOutputStream(dos);
+			
 			byte[] buffer = new byte[1024];
 			int length = -1;
+			System.out.println(Thread.currentThread().getName()+ " : ["+fileName+"] 전송시작!");
 			while((length = bis.read(buffer)) > 0) {
 				bos.write(buffer, 0, length);
 				bos.flush();
 			}
 			System.out.println(Thread.currentThread().getName() + " : [" + fileName + "] 전송완료");
+			bis.close();
+			bos.close();
 			deleteFile(path, fileName);
 			System.out.println("[" + fileName + "] 파일 삭제");
 		} catch (UnknownHostException e) {
@@ -79,7 +72,11 @@ public class ClientSender extends Thread{
 			e.printStackTrace();
 		} finally {
 				try {
+					if(bos != null)bos.close();
+					if(bis != null)bis.close();
 					if(dos != null)dos.close();
+					if(fi != null)fi.close();
+					if(socket != null)socket.close();
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -90,4 +87,5 @@ public class ClientSender extends Thread{
 		File f =new File(path + fileName);
 		if(f.exists()) f.delete();
 	}
+	
 }

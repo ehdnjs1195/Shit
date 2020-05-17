@@ -115,7 +115,7 @@ public class Monitor extends Thread{
 //				bo.write(buffer, 0, readedByte);
 //				bo.flush();//방출
 //			}
-			System.out.println("파일 전송 성공!");
+			System.out.println(Thread.currentThread().getName()+": 파일 전송 성공!");
 		}catch(Exception e){
 			e.printStackTrace();
 		}finally{
