@@ -27,7 +27,8 @@ public class Monitor extends Thread{
 	
 	
 	public Monitor() {}
-
+	
+	
 	@Override
 	public void run() {
 		try {
@@ -55,7 +56,6 @@ public class Monitor extends Thread{
 				StandardWatchEventKinds.ENTRY_MODIFY, StandardWatchEventKinds.ENTRY_DELETE); 
 		while(true) {
 			Thread.sleep(1000);	//1초 간격으로 감시.
-			TreatFailedFiles();
 			//System.out.println("디렉토리를 감시중입니다.");
 			// 변화가 감지되는 경우 이벤트 종류와 파일명을 출력
 			for (WatchEvent event : watchKey.pollEvents()) {
@@ -118,8 +118,6 @@ public class Monitor extends Thread{
 			System.out.println("파일 전송 성공!");
 		}catch(Exception e){
 			e.printStackTrace();
-			System.out.println("네트워크를 찾을수 없음.파일 이름 : "+context+"전송 실패");
-			failedFiles.add(context.toString());
 		}finally{
 			try{
 				if(os!=null)os.close();
@@ -131,14 +129,5 @@ public class Monitor extends Thread{
 		}
 	}
 	
-	public void TreatFailedFiles() {
-//		System.out.println("check4");
-		if(!failedFiles.isEmpty()) {
-			System.out.println("전송 실패했던 파일들을 다시 전송합니다. 남은 파일 개수: "+failedFiles.size());
-			for(String names:failedFiles) {
-				sendFile(names);
-				failedFiles.remove(names);
-			}
-		}
-	}
+	
 }
