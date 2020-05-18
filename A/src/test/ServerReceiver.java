@@ -57,7 +57,7 @@ public class ServerReceiver implements Runnable{
 			if(data == fileSize) {
 				System.out.println("받은 데이터 ["+data +"] : 파일사이즈 [" +fileSize+"]");
 				System.out.println(ip + " : [" +fileName + "] 저장 성공");
-			}else {				
+			}else if(fileSize == 0 || data != fileSize){				
 				File f = new File(path+fileName);
 				f.delete();
 				System.out.println("파일 저장 실패");	 //발생할 수 있는 실패 이유는?

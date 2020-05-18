@@ -46,7 +46,7 @@ public class ClientSender extends Thread{
 			socket = new Socket(ip, port);
 
 			//파일 정보 전송
-			dos = new DataOutputStream(socket.getOutputStream());	//try ~ with resource 구문으로 쓸 수 있나? 순서가 어떻게 되지?
+			dos = new DataOutputStream(socket.getOutputStream());	
 			dos.writeUTF(fileName);
 			dos.writeLong(fileSize);
 			
