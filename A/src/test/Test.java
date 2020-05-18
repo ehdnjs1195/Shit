@@ -20,6 +20,7 @@ public class Test {
 		String fileName =null;
 		while(true) {
 			File f = new File("c:/myfolder/");
+			System.out.println(f.delete());
 			File[] fileList = f.listFiles();
 			for(File file:fileList) {
 				try {
@@ -34,7 +35,7 @@ public class Test {
 					System.out.println(fileName +" : "+ fileSize+" : " +length);
 					Thread.sleep(500);
 				} catch (FileNotFoundException e1) {
-//					e1.printStackTrace();
+					e1.printStackTrace();
 					System.out.println(fileName + "디렉토리에 복사중");
 				}catch (InterruptedException e) {
 					e.printStackTrace();
@@ -44,6 +45,4 @@ public class Test {
 			}
 		}
 	}
-
-
 }

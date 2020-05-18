@@ -19,7 +19,7 @@ public class Server {
 	public static void main(String[] args) {
 		initProperties();
 		ServerSocket serverSocket = null;
-		ServerReceiver r = null;
+		ServerReceiver serverReceiver = null;
 		
 		executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 		
@@ -28,9 +28,9 @@ public class Server {
 			System.out.println("[서버 시작]");
 			while(true) {
 				Socket socket = serverSocket.accept();
-				r = new ServerReceiver(socket, path);
+				serverReceiver = new ServerReceiver(socket, path);
 				
-				executorService.submit(r);
+				executorService.submit(serverReceiver);
 			}
 			
 		} catch (IOException e) {
