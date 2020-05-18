@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
 
-public class ServerReceiver implements Runnable{
+public class ServerReceiver extends Thread{
 	private Socket socket;
 	private String path;
 	
@@ -18,6 +18,7 @@ public class ServerReceiver implements Runnable{
 	public ServerReceiver(Socket socket, String path) {
 		this.socket = socket;
 		this.path = path;
+		setDaemon(true);
 	}
 	
 	@Override

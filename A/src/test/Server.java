@@ -19,7 +19,7 @@ public class Server {
 	public static void main(String[] args) {
 		initProperties();
 		ServerSocket serverSocket = null;
-		Runnable r = null;
+		ServerReceiver r = null;
 		
 		executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 		
