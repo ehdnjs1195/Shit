@@ -10,8 +10,11 @@ import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.Logger;
+
 public class ClientSender extends Thread{
-//	private File[] fileList;
+	private final static Logger logger = Logger.getLogger(ClientSender.class.getName());
 	private String path;
 	private int port;
 	private String ip;
@@ -26,6 +29,7 @@ public class ClientSender extends Thread{
 		this.fileName = fileName;
 		this.fileSize = fileSize;
 		setDaemon(true);
+		BasicConfigurator.configure();
 	}
 	
 	@Override
@@ -56,20 +60,20 @@ public class ClientSender extends Thread{
 			
 			byte[] buffer = new byte[1024];
 			int length = -1;
-			System.out.println(Thread.currentThread().getName()+ " : ["+fileName+"] 전송시작!");
+			logger.debug(Thread.currentThread().getName()+ " : ["+fileName+"] 전송시작!");
 			while((length = bis.read(buffer)) > 0) {
 				bos.write(buffer, 0, length);
 				bos.flush();
 			}
-			System.out.println(Thread.currentThread().getName() + " : [" + fileName + "] 전송완료");
+			logger.info(Thread.currentThread().getName() + " : [" + fileName + "] 전송완료");
 			bis.close();
 			bos.close();
 			deleteFile(path, fileName);
-			System.out.println("[" + fileName + "] 파일 삭제");
+			logger.debug("[" + fileName + "] 파일 삭제");
 		} catch (UnknownHostException e) {
-			e.printStackTrace();
+			logger.error(e+": 서버를 찾을 수 없습니다.");
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error(e+": ["+fileName+"] 파일을 읽을 수 없습니다.");
 		} finally {
 				try {
 					if(bos != null)bos.close();

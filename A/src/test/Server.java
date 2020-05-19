@@ -10,13 +10,18 @@ import java.util.Properties;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.Logger;
+
 public class Server {
+	private final static Logger logger = Logger.getLogger(Server.class.getName());
 	private static String path;
 	private static int port;
 	private static ExecutorService executorService;
 	
 	
 	public static void main(String[] args) {
+		BasicConfigurator.configure();
 		initProperties();
 		ServerSocket serverSocket = null;
 		ServerReceiver serverReceiver = null;
@@ -25,7 +30,7 @@ public class Server {
 		
 		try {
 			serverSocket = new ServerSocket(port);
-			System.out.println("[서버 시작]");
+			logger.debug("[서버 시작]");
 			while(true) {
 				Socket socket = serverSocket.accept();
 				serverReceiver = new ServerReceiver(socket, path);
@@ -37,7 +42,7 @@ public class Server {
 			e.printStackTrace();
 		}
 		executorService.shutdown();
-		System.out.println("[서버 종료]");
+		logger.debug("[서버 종료]");
 	}
 	
 	public static void initProperties() {
