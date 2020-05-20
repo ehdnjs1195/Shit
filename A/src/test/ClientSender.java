@@ -66,16 +66,21 @@ public class ClientSender extends Thread{
 				bos.flush();
 			}
 			logger.info(Thread.currentThread().getName() + " : [" + fileName + "] 전송완료");
-			bis.close();
 			bos.close();
+			bis.close();
 			deleteFile(path, fileName);
 			logger.debug("[" + fileName + "] 파일 삭제");
 		} catch (UnknownHostException e) {
 			logger.error(e+": 서버를 찾을 수 없습니다.");
 		} catch (IOException e) {
-			logger.error(e+": ["+fileName+"] 파일을 읽을 수 없습니다.");
+			logger.error(e+": ["+fileName+"] 파일을 읽을 수 없습니다. (재전송 시도)");
+//			File f = new File(path+fileName);
+//			FileFilter.renameToOri(f, path);
 		} finally {
 				try {
+					System.out.println("finally 진입.");
+					File f = new File(path+fileName);
+					FileFilter.renameToOri(f, path);
 					if(bos != null)bos.close();
 					if(bis != null)bis.close();
 					if(dos != null)dos.close();
@@ -83,6 +88,7 @@ public class ClientSender extends Thread{
 					if(socket != null)socket.close();
 				} catch (IOException e) {
 					e.printStackTrace();
+					logger.error(e+": ["+fileName+"] 파일을 읽을 수 없습니다.33333333");
 				}
 		}
 	}

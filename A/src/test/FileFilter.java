@@ -1,5 +1,6 @@
 package test;
 
+import java.io.File;
 
 public class FileFilter {
 	public FileFilter() {}
@@ -24,5 +25,19 @@ public class FileFilter {
 		String extension =fileName.substring( post );
 		
 		return extension;
+	}
+	
+	public static File renameToIng(File file, String path) {
+		String ingFileName = encFileName(file.getName());
+		file.renameTo(new File(path + ingFileName));
+		File newFile = new File(path + ingFileName);
+		return newFile;
+	}
+	
+	public static File renameToOri(File file, String path) {
+		String oriFileName = decFileName(file.getName());
+		file.renameTo(new File(path + oriFileName));
+		File oriFile = new File(path + oriFileName);
+		return oriFile;
 	}
 }

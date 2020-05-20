@@ -58,14 +58,16 @@ public class ServerReceiver extends Thread{
 				bos.flush();
 				data += length;
 			}
-			
+			bos.close();
+			bis.close();
+			File ingFile = new File(path + fileName);
 			//파일 저장 검사
 			if(data == fileSize) {
-				logger.debug(fileName+" : 받은 데이터 ["+data +"] = 파일사이즈 [" +fileSize+"]");
-				logger.info(ip + " : [" +fileName + "] 저장 성공");
+				File file = FileFilter.renameToOri(ingFile, path);
+				String oriFileName = file.getName();
+				logger.debug(oriFileName+" : 받은 데이터 ["+data +"] = 파일사이즈 [" +fileSize+"]");
+				logger.info(ip + " : [" +oriFileName + "] 저장 성공");
 			}else if(fileSize == 0 || data != fileSize){				
-				File f = new File(path+fileName);
-				f.delete();
 				logger.info("파일 저장 실패");	 //발생할 수 있는 실패 이유는?
 			}
 			
@@ -87,6 +89,4 @@ public class ServerReceiver extends Thread{
 		}
 		logger.debug("["+Thread.currentThread().getName()+" : 작업 종료]");
 	}
-	
-	
 }

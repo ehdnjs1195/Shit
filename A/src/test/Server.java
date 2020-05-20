@@ -23,6 +23,7 @@ public class Server {
 	public static void main(String[] args) {
 		BasicConfigurator.configure();
 		initProperties();
+		deleteUncheckedFiles();
 		ServerSocket serverSocket = null;
 		ServerReceiver serverReceiver = null;
 		
@@ -57,6 +58,16 @@ public class Server {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
+		}
+	}
+	
+	public static void deleteUncheckedFiles() {
+		File f = new File(path);
+		File[] listFiles = f.listFiles();
+		for(File file:listFiles) {
+			if(file.getName().contains("_ing")) {
+				file.delete();
+			}
 		}
 	}
 }
