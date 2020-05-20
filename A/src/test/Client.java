@@ -12,6 +12,7 @@ import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 
 public class Client {
+	private static File[] fileList;
 	private static String path;
 	private static int port;
 	private static String ip;
@@ -65,16 +66,19 @@ public class Client {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			File[] fileList = createFileInfo();
+			createFileInfo();
 			for (File file : fileList) {
+				System.out.println("바꾸기 전: "+file.exists());
 				if (file.isFile() && !file.getName().contains("_ing")) {
-					File ingFile = FileFilter.renameToIng(file, path);
+					File f = FileFilter.renameToIng(file, path);
+					System.out.println("바꾸기전 file : " + file.exists());
+					File ingFile = new File(f.getPath());
 					String fileName = ingFile.getName();
 					long fileSize = ingFile.length();
-					
+					System.out.println("바꾼 후 존재여부: "+ingFile.exists()+": fileSize: "+fileSize+" : 파일경로: "+ingFile.getPath());
 					//파일 변화 감지
 					if(isFileChange(ingFile)) continue;
-						
+					System.out.println("continue 되면 안됨.");
 					ClientSender cs = new ClientSender(port, ip, path, fileName, fileSize);
 					// 작업큐에 담기
 					executorService.submit(cs);
@@ -87,23 +91,23 @@ public class Client {
 	public static boolean isFileChange(File file) {
 
 		long time1 = file.lastModified();
-//		try {
-//			Thread.sleep(1000);	//1초 간격 주기.
-//		} catch (InterruptedException e) {
-//			e.printStackTrace();
-//		}	
+		try {
+			Thread.sleep(1000);	//1초 간격 주기.
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}	
 		long time2 = file.lastModified();
+		System.out.println(time1 +" : " +time2 + " : " + file.exists());
 		if (time1 == time2) {
 			return false;
+		}else {
+			return true;			
 		}
-		return true;
 	}
 
 	// 파일 정보 정보 생성
-	public static File[] createFileInfo() {
+	public static void createFileInfo() {
 		File f = new File(path);
-		File[] fileList = f.listFiles();
-		
-		return fileList;
+		fileList = f.listFiles();
 	}
 }

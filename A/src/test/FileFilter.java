@@ -33,6 +33,12 @@ public class FileFilter {
 		File newFile = new File(path + ingFileName);
 		return newFile;
 	}
+//	public static void main(String[] args) {
+//		
+//		File f = renameToIng(new File("c:/myFolder/win64_11gR2_database_1of2.zip"), "c:/myFolder/");
+//		System.out.println(f.getName()+" : "+f.exists());
+//		
+//	}
 	
 	public static File renameToOri(File file, String path) {
 		String oriFileName = decFileName(file.getName());
