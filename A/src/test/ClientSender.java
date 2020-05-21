@@ -73,14 +73,12 @@ public class ClientSender extends Thread{
 		} catch (UnknownHostException e) {
 			logger.error(e+": 서버를 찾을 수 없습니다.");
 		} catch (IOException e) {
-			logger.error(e+": ["+fileName+"] 파일을 읽을 수 없습니다. (재전송 시도)");
+			logger.error(e+": ["+fileName+"] 파일을 읽을 수 없습니다.");
 //			File f = new File(path+fileName);
 //			FileFilter.renameToOri(f, path);
 		} finally {
 				try {
-					System.out.println("finally 진입.");
-					File f = new File(path+fileName);
-					FileFilter.renameToOri(f, path);
+//					System.out.println("finally 진입.");
 					if(bos != null)bos.close();
 					if(bis != null)bis.close();
 					if(dos != null)dos.close();

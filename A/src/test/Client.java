@@ -68,17 +68,15 @@ public class Client {
 			}
 			createFileInfo();
 			for (File file : fileList) {
-				System.out.println("바꾸기 전: "+file.exists());
+				//파일이 변하는지 먼저 체크. 변하고 있으면 건너뛰기.
+				if(isFileChange(path+file.getName())) continue;
+				
 				if (file.isFile() && !file.getName().contains("_ing")) {
-					File f = FileFilter.renameToIng(file, path);
-					System.out.println("바꾸기전 file : " + file.exists());
-					File ingFile = new File(f.getPath());
+					File ingFile = FileFilter.renameToIng(file, path);
+
 					String fileName = ingFile.getName();
 					long fileSize = ingFile.length();
-					System.out.println("바꾼 후 존재여부: "+ingFile.exists()+": fileSize: "+fileSize+" : 파일경로: "+ingFile.getPath());
 					//파일 변화 감지
-					if(isFileChange(ingFile)) continue;
-					System.out.println("continue 되면 안됨.");
 					ClientSender cs = new ClientSender(port, ip, path, fileName, fileSize);
 					// 작업큐에 담기
 					executorService.submit(cs);
@@ -88,21 +86,21 @@ public class Client {
 	}
 
 	// 파일이 변하는지 감지하는 메서드
-	public static boolean isFileChange(File file) {
-
-		long time1 = file.lastModified();
-		try {
-			Thread.sleep(1000);	//1초 간격 주기.
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}	
-		long time2 = file.lastModified();
-		System.out.println(time1 +" : " +time2 + " : " + file.exists());
-		if (time1 == time2) {
-			return false;
-		}else {
-			return true;			
-		}
+	public static boolean isFileChange(String path) {
+		File file = new File(path);
+		System.out.println(path);
+			long time1 = file.lastModified();
+			try {
+				Thread.sleep(1000);	//1초 간격 주기.
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}	
+			long time2 = file.lastModified();
+			if (time1 == time2) {
+				return false;
+			}else {
+				return true;			
+			}
 	}
 
 	// 파일 정보 정보 생성
