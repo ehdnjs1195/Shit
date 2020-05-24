@@ -61,7 +61,6 @@ public class Client {
 		}
 		while (true) {
 			try {
-//				System.out.println("감시중?");
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
@@ -89,18 +88,18 @@ public class Client {
 	public static boolean isFileChange(String path) {
 		File file = new File(path);
 		System.out.println(path);
-			long time1 = file.lastModified();
-			try {
-				Thread.sleep(1000);	//1초 간격 주기.
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}	
-			long time2 = file.lastModified();
-			if (time1 == time2) {
-				return false;
-			}else {
-				return true;			
-			}
+		long time1 = file.lastModified();
+		try {
+			Thread.sleep(1000);	//1초 간격 주기.
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}	
+		long time2 = file.lastModified();
+		if (time1 == time2) {
+			return false;
+		}else {
+			return true;			
+		}
 	}
 
 	// 파일 정보 정보 생성

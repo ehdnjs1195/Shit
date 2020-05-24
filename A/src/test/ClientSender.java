@@ -5,9 +5,9 @@ import java.io.BufferedOutputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.net.SocketException;
 import java.net.UnknownHostException;
 
 import org.apache.log4j.BasicConfigurator;
@@ -40,24 +40,15 @@ public class ClientSender extends Thread{
 	
 	//파일 전송
 	public void sendFile(String fileName, long fileSize) {
-		Socket socket = null;
-		DataOutputStream dos = null;
-		FileInputStream fi = null;
-		BufferedInputStream bis = null;
-		BufferedOutputStream bos = null;
-		
-		try {
-			socket = new Socket(ip, port);
-
-			//파일 정보 전송
-			dos = new DataOutputStream(socket.getOutputStream());	
+		try(Socket socket = new Socket(ip, port);
+				DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
+				FileInputStream fi = new FileInputStream(path+fileName);
+				BufferedInputStream bis = new BufferedInputStream(fi);
+				BufferedOutputStream bos = new BufferedOutputStream(dos);) {
+			//파일 정보 전송	
 			dos.writeUTF(fileName);
 			dos.writeLong(fileSize);
-			
-			fi = new FileInputStream(path+fileName);
-			bis = new BufferedInputStream(fi);
-			bos = new BufferedOutputStream(dos);
-			
+
 			byte[] buffer = new byte[1024];
 			int length = -1;
 			logger.debug(Thread.currentThread().getName()+ " : ["+fileName+"] 전송시작!");
@@ -72,23 +63,18 @@ public class ClientSender extends Thread{
 			logger.debug("[" + fileName + "] 파일 삭제");
 		} catch (UnknownHostException e) {
 			logger.error(e+": 서버를 찾을 수 없습니다.");
+		} catch (SocketException e) {
+			logger.error(e + ": 서버와 연결 끊김");
+
+			File f = new File(path+fileName);
+			File f2=FileFilter.renameToOri(f, path);
+
+			System.out.println(f2.exists() + " : " + f2.getPath()+" : [전송 재시도]");
 		} catch (IOException e) {
+
 			logger.error(e+": ["+fileName+"] 파일을 읽을 수 없습니다.");
-//			File f = new File(path+fileName);
-//			FileFilter.renameToOri(f, path);
-		} finally {
-				try {
-//					System.out.println("finally 진입.");
-					if(bos != null)bos.close();
-					if(bis != null)bis.close();
-					if(dos != null)dos.close();
-					if(fi != null)fi.close();
-					if(socket != null)socket.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-					logger.error(e+": ["+fileName+"] 파일을 읽을 수 없습니다.33333333");
-				}
-		}
+
+		} 
 	}
 	
 	public void deleteFile(String path, String fileName) {
