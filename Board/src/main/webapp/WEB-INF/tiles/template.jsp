@@ -14,18 +14,7 @@
              width:15%;
             background-color: gray;
         }
-        #main{
-            float:left;
-             width:85%;
-            background-color: lime;
-        }
-        #footer{
-            width: 100%;
-            height: 50px;            
-            text-align: center;
-            background-color: orange;
-            clear:both;
-        }
+        
          #left, #main{ 
                min-height: 600px;
          } 

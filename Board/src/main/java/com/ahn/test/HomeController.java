@@ -36,29 +36,24 @@ public class HomeController {
 		return "home.page";
 	}
 	
-	/**
-     * Tiles를 사용하지 않은 일반적인 형태
-     */    
-    @RequestMapping("/test.do")
-    public String test() {
-        return "test";
-    }    
-    
     /**
-     * Tiles를 사용(header, left, footer 포함)
+     * Tiles를 사용(header, footer 포함) => ex) .page로 끝남.
      */        
     @RequestMapping("/testPage.do")
     public String testPage() {
         return "test.page";
     }
-    
-    @RequestMapping("/testPage2.do")
-    public String testPage2() {
-        return "a/test.page";
+
+    @RequestMapping("/users/signupform.do")
+    public String signupForm() {
+    	
+    	return "users/signupform.page";
     }
-    @RequestMapping("/testPage3.do")
-    public String testPage3() {
-        return "a/b/test.page";
+    
+    @RequestMapping("/users/loginform.do")
+    public String loginForm() {
+    	
+    	return "users/loginform.page";
     }
     
     /**

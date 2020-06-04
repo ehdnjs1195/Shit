@@ -9,11 +9,15 @@ import javax.servlet.http.HttpSession;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
+import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.ModelAndView;
 
+@Aspect
+@Component
 public class LoginAspect {
 
-	@Around("execution(org.springframework.web.servlet.ModelAndView auth*(..))")		//ModelAndView 리턴타입, auth로 시작하는  모든 메서드, 인자는 상관 없음
+	@Around("execution(org.springframework.web.servlet.ModelAndView *(..))")		//ModelAndView 리턴타입, 모든 메서드, 인자는 상관 없음
 	public Object loginCheck(ProceedingJoinPoint joinPoint) throws Throwable {
 		//aop 가 적용된 메소드에 전달된 값을 Object[] 로 얻어오기
 		Object[] args=joinPoint.getArgs();
@@ -22,6 +26,7 @@ public class LoginAspect {
 		}
 		//로그인 여부
 		boolean isLogin=false;
+		boolean isAdmin=false;
 		HttpServletRequest request=null;
 		for(Object tmp:args) {
 			//인자로 전달된 값중에 HttpServletRequest type 을 찾아서		=> auth* 메서드에서 인자로 HttpServletRequest type을 갖고 있어야 한다.
@@ -33,6 +38,8 @@ public class LoginAspect {
 				//세션에 "id" 라는 키값으로 저장된게 있는지 확인(로그인 여부)
 				if(session.getAttribute("id") != null) {
 					isLogin=true;
+				} else if(session.getAttribute("auth").equals("U002")) {
+					isAdmin=true;
 				}
 			}
 		}

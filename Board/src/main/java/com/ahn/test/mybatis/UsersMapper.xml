@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="users">
+	<insert id="insert" parameterType="usersDto">
+		insert into board_user
+		(user_id, user_pwd, user_email, user_name, user_regdate) 
+		values(#{user_id}, #{user_pwd},#{user_email}, #{user_name}, sysdate)
+	</insert>
+	<select id="getPwdHash" parameterType="String" resultType="usersDto">
+		SELECT user_pwd, user_authority_code
+		FROM board_user
+		WHERE user_id=#{id}
+	</select>
+</mapper>
