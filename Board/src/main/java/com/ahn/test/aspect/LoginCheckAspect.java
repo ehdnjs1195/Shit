@@ -10,12 +10,12 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
 
 
-@Aspect
-@Component
+//@Aspect
+//@Component
 public class LoginCheckAspect {
-	@Pointcut("execution(* com.ahn.test.UsersController.get*(..)) || execution(* kr.coo.civ.MemberController.set*(..))")
-	public void usersPoint() {
-	}
+//	@Pointcut("execution(* com.ahn.test.UsersController.get*(..)) || execution(* kr.coo.civ.MemberController.set*(..))")
+//	public void usersPoint() {
+//	}
 
 //	@Pointcut("execution(* kr.coo.civ.MovieController.commentWrite(..))")
 //	public void movieDetailPoint() {
@@ -25,7 +25,7 @@ public class LoginCheckAspect {
 //	public void paymentPoint() {
 //	}
 
-	@Around("usersPoint()")
+//	@Around("usersPoint()")
 	public Object sessionCheck(ProceedingJoinPoint pjp) throws Throwable {
 		HttpSession session = null;
 		HttpServletRequest request = null;

@@ -10,10 +10,15 @@ public class AdminController {
 	@Autowired
 	private AdminService service;
 	
-	@RequestMapping("/users/admin.do")
+	@RequestMapping("/users/private/admin.do")
 	public ModelAndView admin(ModelAndView mView) {
 		service.getList(mView);
-		mView.setViewName("users/admin.page");
+		mView.setViewName("users/private/admin.page");
 		return mView;
+	}
+	
+	@RequestMapping("/users/private/test.do")
+	public String testPage() {
+		return "users/private/test.page";
 	}
 }

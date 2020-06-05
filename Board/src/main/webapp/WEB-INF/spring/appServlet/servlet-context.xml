@@ -80,7 +80,7 @@
 	<context:component-scan base-package="com.ahn.test" />
 	
 	<!-- 어노테이션 기반으로 aop 적용할 수 있도록 설정 -->
-	<aop:aspectj-autoproxy></aop:aspectj-autoproxy>
+	<!-- <aop:aspectj-autoproxy></aop:aspectj-autoproxy> -->
 	
 	<!-- 파일 업로드 폼 전송 처리를 위한 bean 설정 -->
 	<beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
@@ -118,6 +118,30 @@
         <beans:property name="order" value="1" />
     </beans:bean>    
 	
+		<!-- 인터셉터 bean 설정 -->
+	<!-- 사용자 세션체크 bean -->
+	<beans:bean id="loginInterceptor" class="com.ahn.test.interceptor.LoginInterceptor"/>
+	<!-- 관리자 세션체크 bean -->
+	<beans:bean id="adminInterceptor" class="com.ahn.test.interceptor.AdminInterceptor"/>
+	<!-- 인터셉터 매핑정보 -->
+	<interceptors>
+		<!-- 관리자 세션체크 매핑-->
+		<interceptor>
+			<mapping path="/users/private/*"/>
+			<beans:ref bean="adminInterceptor"/>
+		</interceptor>
+		<!-- 사용자 세션체크 매핑 -->
+		<!-- <interceptor>
+			<mapping path="/board/write.do"/>
+			<mapping path="/board/insert.do"/>
+			<mapping path="/board/update.do"/>
+			<mapping path="/board/delete.do"/>
+			<mapping path="/reply/insertRest.do"/>
+			<mapping path="/shop/cart/insert.do"/>
+			<mapping path="/shop/cart/list.do"/>
+			<beans:ref bean="loginInterceptor"/>
+		</interceptor> -->
+	</interceptors>
 	
 	
 </beans:beans>
