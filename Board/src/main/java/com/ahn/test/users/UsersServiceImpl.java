@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.servlet.ModelAndView;
 
 @Service
 public class UsersServiceImpl implements UsersService{
@@ -38,5 +37,15 @@ public class UsersServiceImpl implements UsersService{
 			session.setAttribute("id", dto.getUser_id());
 			session.setAttribute("auth", dto2.getUser_authority_code());
 		}
+	}
+	@Override
+	public String findUserId(UsersDto dto) {
+		UsersDto userInfo = sqlSession.selectOne("users.getUserInfo", dto);
+		return userInfo.getUser_id();
+	}
+	@Override
+	public String findUserPwd(UsersDto dto) {
+		UsersDto userInfo = sqlSession.selectOne("users.getUserInfo", dto);
+		return userInfo.getUser_pwd();
 	}
 }

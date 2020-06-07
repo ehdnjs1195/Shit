@@ -13,7 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 public class UsersController {
 	@Autowired
 	private UsersService service;
-	
+	//회원가입
 	@RequestMapping("/users/signup.do")
 	public String signup(UsersDto dto) {
 		service.addUser(dto);
@@ -33,6 +33,30 @@ public class UsersController {
 	public String logout(HttpSession session) {
 		session.invalidate();
 		return "redirect:/";
+	}
+	//아이디 찾기 폼
+	@RequestMapping("/users/findUserIdForm")
+	public String findIdForm() {
+		return "users/findUserIdForm.page";
+	}
+	//아이디 찾기
+	@RequestMapping("/users/findUserId")
+	public String findUserId(@ModelAttribute UsersDto dto, HttpServletRequest request) {
+		String userId = service.findUserId(dto);
+		request.setAttribute("userId", userId);
+		return "users/confirmUserInfo.page";
+	}
+	//비밀번호 찾기 폼
+	@RequestMapping("/users/findUserPwdForm")
+	public String findPwdForm() {
+		return "users/findUserPwdForm.page";
+	}
+	//비밀번호 찾기
+	@RequestMapping("/users/findUserPwd")
+	public String findUserPwd(@ModelAttribute UsersDto dto, HttpServletRequest request) {
+		String userPwd=service.findUserPwd(dto);
+		request.setAttribute("userPwd", userPwd);
+		return "users/confirmUserInfo.page";
 	}
 
 }

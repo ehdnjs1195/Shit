@@ -15,6 +15,7 @@
 			<input type="password" name="user_pwd" placeholder="Password" value=""/>
 			<input type="submit" name="" value="Login"/>
 	</form>
+	<a href="findUserIdForm.do">아이디 찾기</a> <a href="findUserPwdForm.do">비밀번호 찾기</a>
 </div>
 </body>
 </html>

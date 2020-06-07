@@ -11,4 +11,20 @@
 		FROM board_user
 		WHERE user_id=#{id}
 	</select>
+	<select id="getUserInfo" parameterType="usersDto" resultType="usersDto">
+		SELECT *
+		FROM board_user
+		where  
+		<choose>
+			<when test="user_name != null"> <!-- 아이디 입력되면  -->
+				user_name='${user_name}'
+			</when>
+			<when test="user_email != null"> <!-- 이메일이 입력되면  -->
+				and user_email='${user_email}'
+			</when>
+			<when test="user_id != null"> <!-- 아이디가 입력되면  -->
+				and user_id='${user_id}'
+			</when>
+		</choose>
+	</select>
 </mapper>
