@@ -1,45 +1,92 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="board2">
-	<select id="getCount" parameterType="boardDto"
-		resultType="int">
-		SELECT NVL(MAX(ROWNUM), 0)
-		FROM board
-		<choose>
-			<when test="board_title != null and board_content != null">
-				WHERE board_title LIKE '%'||#{board_title}||'%' OR
-				board_content  LIKE '%'||#{board_content}||'%'
-			</when>
-			<when test="board_title != null">
-				WHERE board_title LIKE '%'||#{board_title}||'%'
-			</when>
-			<when test="board_writer != null">
-				WHERE board_writer LIKE '%'||#{board_writer}||'%'
-			</when>
-		</choose>
-	</select>
-	<select id="getList" parameterType="boardDto"
-		resultType="boardDto">
-		SELECT *
-		FROM
-			(SELECT result1.*, ROWNUM AS rnum
-			FROM
-				(SELECT board_num, board_writer, board_title, board_view_count, 
-				TO_CHAR(board_regdate, 'YY.MM.DD HH24:MI') AS board_regdate
-				FROM board
-				<choose>
-					<when test="board_title != null and board_content != null">
-						WHERE board_title LIKE '%'||#{board_title}||'%' OR
-						board_content  LIKE '%'||#{board_content}||'%'
-					</when>
-					<when test="board_title != null">
-						WHERE board_title LIKE '%'||#{board_title}||'%'
-					</when>
-					<when test="board_writer != null">
-						WHERE board_writer LIKE '%'||#{board_writer}||'%'
-					</when>
-				</choose>
-				ORDER BY board_num DESC) result1)
-		WHERE rnum BETWEEN #{startRowNum} AND #{endRowNum}
-	</select>
+<mapper namespace="board">
+
+	    <!--목록-->
+    <select id="list" resultType="BoardDto">
+        <![CDATA[
+        SELECT
+            board_num
+            , board_title
+            , board_content
+            , board_writer
+            , board_regdate
+            , board_view_count
+        FROM board
+        WHERE board_num > 0
+        ORDER BY board_num DESC, board_regdate DESC
+        ]]>
+    </select>
+
+    <!--목록 페이징-->
+    <select id="listPaging" parameterType="com.ahn.test.util.Criteria" resultType="BoardDto">
+        <![CDATA[
+        SELECT
+            board_num
+            , board_title
+            , board_content
+            , board_writer
+            , board_regdate
+            , board_view_count
+        FROM board
+        WHERE board_num > 0
+        ]]>
+        <include refid="search"/>
+        <![CDATA[
+        ORDER BY board_num DESC, board_regdate DESC
+        LIMIT #{page}, #{perPageNum}
+        ]]>
+    </select>
+
+    <!--게시글 전체숫자 or 검색된 게시글의 숫자-->
+    <select id="listCount" parameterType="com.ahn.test.util.Criteria" resultType="int">
+        <![CDATA[
+        SELECT COUNT(board_num)
+        FROM board
+        WHERE board_num > 0
+        ]]>
+        <include refid="search"/>
+    </select>
+
+   
+
+    <update id="updateViewCnt">
+        UPDATE board
+        SET board_view_count = board_view_count + 1
+        WHERE board_num = #{board_num}
+    </update>
+
+    <!--검색옵션 SQL-->
+    <sql id="search">
+        <if test="searchType != null">
+            <if test="searchType == 't'.toString()">
+                AND board_title LIKE CONCAT('%', #{keyword}, '%')
+            </if>
+            <if test="searchType == 'c'.toString()">
+                AND board_ontent LIKE CONCAT('%', #{keyword}, '%')
+            </if>
+            <if test="searchType == 'w'.toString()">
+                AND board_writer LIKE CONCAT('%', #{keyword}, '%')
+            </if>
+            <if test="searchType == 'tc'.toString()">
+                AND (
+                title LIKE CONCAT('%', #{keyword}, '%')
+                OR content LIKE CONCAT('%', #{keyword}, '%')
+                )
+            </if>
+            <if test="searchType == 'cw'.toString()">
+                AND (
+                board_content LIKE CONCAT('%', #{keyword}, '%')
+                OR board_writer LIKE CONCAT('%', #{keyword}, '%')
+                )
+            </if>
+            <if test="searchType == 'tcw'.toString()">
+                AND (
+                board_title LIKE CONCAT('%', #{keyword}, '%')
+                OR board_content LIKE CONCAT('%', #{keyword}, '%')
+                OR board_writer LIKE CONCAT('%', #{keyword}, '%')
+                )
+            </if>
+        </if>
+    </sql>
 </mapper>

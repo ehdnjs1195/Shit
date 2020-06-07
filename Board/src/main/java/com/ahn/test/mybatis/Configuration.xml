@@ -6,7 +6,6 @@
 	<!-- 자주 사용하는 type 의 별칭 지정하기 -->
 	<typeAliases>
 		<typeAlias type="com.ahn.test.users.UsersDto" alias="usersDto"/>
-		<!-- <typeAlias type="com.ahn.test.board.BoardVO" alias="boardVO"/> -->
 		<typeAlias type="com.ahn.test.board.BoardDto" alias="boardDto"/>
 	</typeAliases>
 
@@ -14,7 +13,6 @@
 	<mappers>
 		<mapper resource="com/ahn/test/mybatis/UsersMapper.xml"/>
 		<mapper resource="com/ahn/test/mybatis/AdminMapper.xml"/>
-		<!-- <mapper resource="com/ahn/test/board/boardMapper.xml"/> -->
 		<mapper resource="com/ahn/test/mybatis/BoardMapper.xml"/>
 	</mappers>
 	

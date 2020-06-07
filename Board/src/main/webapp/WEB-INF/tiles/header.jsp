@@ -16,6 +16,7 @@
 		<div class="collapse navbar-collapse" id="one">
 			<ul class="nav navbar-nav">
 				<li><a href="${pageContext.request.contextPath }/home.do">HOME</a></li>
+				<li  ><a href="${pageContext.request.contextPath }/board/list.do">전체게시판</a></li>
 				<li  ><a href="${pageContext.request.contextPath }/cafe/list.do">자유게시판</a></li>
 				<li  ><a href="#">QnA게시판</a></li>
 				<li  ><a href="#">공지게시판</a></li>

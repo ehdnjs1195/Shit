@@ -1,6 +1,8 @@
 package com.ahn.test.users;
 
-public class UsersDto {
+import java.io.Serializable;
+
+public class UsersDto implements Serializable{
 	private String user_id;
 	private String user_pwd;
 	private String user_email;
@@ -9,9 +11,14 @@ public class UsersDto {
 	private String user_authority_code;
 	private String user_regdate;
 	private int login_count;
+	private int startRowNum;
+	private int endRowNum;
+	private int prevNum; //이전글의 글번호를 담을 필드
+	private int nextNum; //다음글의 글번호를 담을 필드
 	public UsersDto() {}
 	public UsersDto(String user_id, String user_pwd, String user_email, String user_name, String user_state_code,
-			String user_authority_code, String user_regdate, int login_count) {
+			String user_authority_code, String user_regdate, int login_count, int startRowNum, int endRowNum,
+			int prevNum, int nextNum) {
 		super();
 		this.user_id = user_id;
 		this.user_pwd = user_pwd;
@@ -21,6 +28,10 @@ public class UsersDto {
 		this.user_authority_code = user_authority_code;
 		this.user_regdate = user_regdate;
 		this.login_count = login_count;
+		this.startRowNum = startRowNum;
+		this.endRowNum = endRowNum;
+		this.prevNum = prevNum;
+		this.nextNum = nextNum;
 	}
 	public String getUser_id() {
 		return user_id;
@@ -70,4 +81,29 @@ public class UsersDto {
 	public void setLogin_count(int login_count) {
 		this.login_count = login_count;
 	}
+	public int getStartRowNum() {
+		return startRowNum;
+	}
+	public void setStartRowNum(int startRowNum) {
+		this.startRowNum = startRowNum;
+	}
+	public int getEndRowNum() {
+		return endRowNum;
+	}
+	public void setEndRowNum(int endRowNum) {
+		this.endRowNum = endRowNum;
+	}
+	public int getPrevNum() {
+		return prevNum;
+	}
+	public void setPrevNum(int prevNum) {
+		this.prevNum = prevNum;
+	}
+	public int getNextNum() {
+		return nextNum;
+	}
+	public void setNextNum(int nextNum) {
+		this.nextNum = nextNum;
+	}
+	
 }
