@@ -1,32 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="admin">
-	<select id="getList" resultType="usersDto">
-		select * from board_user
-	</select>
-	
-	<!-- 회원목록조회  -->
-	<select id="selectUserList" resultType="usersDto">
+<mapper namespace="board">
+	<!-- 게시판 목록조회  -->
+	<select id="selectBoardList" resultType="boardDto">
 		<include refid="pagingHeader"></include>
-			SELECT ROWNUM,user_id,user_name,user_email,user_state_code,user_authority_code,user_regdate
-			FROM board_user
+			SELECT ROWNUM,board_num,board_title,board_writer,board_content,board_view_count,board_regdate,
+				board_type_code,reply_order_num,reply_depth_num
+			FROM board
 			<include refid="search"></include>
-			ORDER BY user_regdate DESC
+			ORDER BY board_regdate DESC
 		<include refid="pagingFooter"></include> 
 	</select>
 	
-	<select id="countUser" resultType="int">
+	<select id="countBoard" resultType="int">
 		SELECT count(*)
-		FROM board_user
+		FROM board
 		<include refid="search"></include> 
 	</select>
-	<!-- 검색조건 ssql -->
+	<!-- 검색조건 sql -->
 	<sql id="search">
 		<choose>
 			<when test="searchOption=='all'">
-				WHERE user_id like '%'||#{keyword}||'%'
-				OR user_state_code like '%'||#{keyword}||'%'
-				OR user_authority_code like '%'||#{keyword}||'%'
+				WHERE board_title like '%'||#{keyword}||'%'
+				OR board_content like '%'||#{keyword}||'%'
+				OR board_writer like '%'||#{keyword}||'%'
 			</when>
 			<!-- 전체 검색이 아닐 경우 -->
 			<otherwise>

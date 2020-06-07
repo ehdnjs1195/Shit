@@ -16,10 +16,11 @@
 		<div class="collapse navbar-collapse" id="one">
 			<ul class="nav navbar-nav">
 				<li><a href="${pageContext.request.contextPath }/">HOME</a></li>
+				<li  ><a href="${pageContext.request.contextPath }/board/boardList.do">전체게시판</a></li>
 				<li  ><a href="${pageContext.request.contextPath }/cafe/list.do">자유게시판</a></li>
 				<li  ><a href="#">QnA게시판</a></li>
 				<li  ><a href="#">공지게시판</a></li>
-				<c:if test="${sessionScope.auth eq 'U002' }"><li><a href="${pageContext.request.contextPath }/users/private/admin.do" >관리자</a></li></c:if>
+				<c:if test="${sessionScope.auth eq 'U002' }"><li><a href="${pageContext.request.contextPath }/admin/usersList.do" >관리자</a></li></c:if>
 			</ul>
 			<c:choose>
 				<c:when test="${empty sessionScope.id }">	<!-- sessionScope. 는 생략 가능 -->
