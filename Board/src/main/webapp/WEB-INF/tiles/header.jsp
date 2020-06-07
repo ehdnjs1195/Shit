@@ -15,7 +15,7 @@
 		<!-- xs 영역에서는 숨겨졌다가 버튼을 누르면 나오게 할 컨텐츠 -->
 		<div class="collapse navbar-collapse" id="one">
 			<ul class="nav navbar-nav">
-				<li><a href="${pageContext.request.contextPath }/">HOME</a></li>
+				<li><a href="${pageContext.request.contextPath }/home.do">HOME</a></li>
 				<li  ><a href="${pageContext.request.contextPath }/cafe/list.do">자유게시판</a></li>
 				<li  ><a href="#">QnA게시판</a></li>
 				<li  ><a href="#">공지게시판</a></li>

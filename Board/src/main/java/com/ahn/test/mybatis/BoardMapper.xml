@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="board2">
+	<select id="getCount" parameterType="boardDto"
+		resultType="int">
+		SELECT NVL(MAX(ROWNUM), 0)
+		FROM board
+		<choose>
+			<when test="board_title != null and board_content != null">
+				WHERE board_title LIKE '%'||#{board_title}||'%' OR
+				board_content  LIKE '%'||#{board_content}||'%'
+			</when>
+			<when test="board_title != null">
+				WHERE board_title LIKE '%'||#{board_title}||'%'
+			</when>
+			<when test="board_writer != null">
+				WHERE board_writer LIKE '%'||#{board_writer}||'%'
+			</when>
+		</choose>
+	</select>
+	<select id="getList" parameterType="boardDto"
+		resultType="boardDto">
+		SELECT *
+		FROM
+			(SELECT result1.*, ROWNUM AS rnum
+			FROM
+				(SELECT board_num, board_writer, board_title, board_view_count, 
+				TO_CHAR(board_regdate, 'YY.MM.DD HH24:MI') AS board_regdate
+				FROM board
+				<choose>
+					<when test="board_title != null and board_content != null">
+						WHERE board_title LIKE '%'||#{board_title}||'%' OR
+						board_content  LIKE '%'||#{board_content}||'%'
+					</when>
+					<when test="board_title != null">
+						WHERE board_title LIKE '%'||#{board_title}||'%'
+					</when>
+					<when test="board_writer != null">
+						WHERE board_writer LIKE '%'||#{board_writer}||'%'
+					</when>
+				</choose>
+				ORDER BY board_num DESC) result1)
+		WHERE rnum BETWEEN #{startRowNum} AND #{endRowNum}
+	</select>
+</mapper>

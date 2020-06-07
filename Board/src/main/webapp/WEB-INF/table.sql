@@ -15,7 +15,7 @@ eng_code_name varchar2(20));
 --유저 테이블
 create table board_user(
 user_id varchar2(20) primary key,
-user_pwd varchar2(20) not null,
+user_pwd varchar2(100) not null,
 user_email varchar2(30),
 user_name varchar2(20),
 user_state_code varchar2(5) default 'S001' references board_code_detail(detail_code),

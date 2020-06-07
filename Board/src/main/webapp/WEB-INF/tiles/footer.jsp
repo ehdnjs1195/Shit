@@ -53,5 +53,5 @@
             </div>
         </div>
     </footer>
-    <section style="text-align:center; margin:10px auto;"><p>Designed by <a href="../"> <strong>A</strong>ragon <strong>D</strong>osigas<strong>W</strong>illiam </a></p></section>
+    <section style="text-align:center; margin:10px auto;"><p>Designed by <a href="${pageContext.request.contextPath}/home.do"> <strong>A</strong>ragon <strong>D</strong>osigas<strong>W</strong>illiam </a></p></section>
 </div>
