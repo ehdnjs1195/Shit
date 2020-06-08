@@ -14,9 +14,9 @@ public class LoginInterceptor extends HandlerInterceptorAdapter{
 		// 세션 객체 생성
 		HttpSession session = request.getSession();
 		// 세션에 id가 null이면
-		if(session.getAttribute("userId") == null) {
+		if(session.getAttribute("id") == null) {
 			// 로그인 페이지로 이동
-			response.sendRedirect(request.getContextPath()+"/member/login.do?msg=nologin");
+			response.sendRedirect(request.getContextPath()+"/home.do");
 			// 컨트롤러를 실행하지 않는다.(요청페이지로 이동하지 않는다)
 			return false;
 		// null이 아니면
